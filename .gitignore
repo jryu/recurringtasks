@@ -1,4 +1,5 @@
 secret_key.py
+db.sqlite3
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
