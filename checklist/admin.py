@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import Check, Task
 
-# Register your models here.
+admin.site.register(Check)
+admin.site.register(Task)
