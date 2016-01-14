@@ -1,5 +1,35 @@
 {% extends "checklist/base.html" %}
+{% load checklist %}
+{% load staticfiles %}
+
+{% block head %}
+  <script src="{% static 'checklist/main.js' %}"></script>
+
+  <script>
+    $(function() {
+      var today = new Date(2016, 0, 9);
+
+      {% for task in object_list %}
+        setLastDate('{{ task.pk }}', {{ task.interval }}, today,
+            {{ task.last_date | date_json }});
+      {% endfor %}
+    });
+  </script>
+  <style>
+    ul li .ui-icon-check::after { background-color: #1EDC00; }
+  </style>
+{% endblock %}
 
 {% block content %}
-  <p>Hello Recurring Tasks!</p>
+  <ul data-role="listview" data-count-theme="b" data-inset="true">
+  {% for task in object_list %}
+    {% ifchanged task.interval %}
+	<li data-role="list-divider">{{ task.interval|interval_label }}</li>
+	{% endifchanged %}
+	<li><a id="btn-{{ task.pk }}" href=#>
+      {{ task.name }}
+      <span id="cnt-{{ task.pk }}" class="ui-li-count"></span>
+    </a></li>
+  {% endfor %}
+  </ul>
 {% endblock %}

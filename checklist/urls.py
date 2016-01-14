@@ -1,7 +1,7 @@
 from django.conf.urls import url
-from django.views.generic import TemplateView
+
+from checklist import views
 
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name='checklist/main.html'),
-        name='checklist_main'),
+    url(r'^$', views.Main.as_view(), name='checklist_main'),
 ]
