@@ -10,16 +10,26 @@
     today.setHours(0, 0, 0, 0);
 
     $(function() {
-
       {% for task in object_list %}
         setLastDate('{{ task.pk }}', {{ task.interval }}, today,
             {{ task.last_date | date_json }});
       {% endfor %}
+
+      $('#footer-date').text(today.toLocaleDateString());
     });
   </script>
   <style>
     ul li .ui-icon-check::after { background-color: #1EDC00; }
   </style>
+{% endblock %}
+
+{% block header %}
+  <h1>Checklist</h1>
+  <a href="#popupMenu" data-rel="popup" data-icon='bars' class="ui-btn-right ">Menu</a>
+  <div data-role="popup" id="popupMenu" data-theme="b">
+    <ul data-role="listview" data-inset="true" style="min-width:210px;">
+    </ul>
+  </div>
 {% endblock %}
 
 {% block content %}
@@ -38,4 +48,9 @@
   <div data-role="popup" id="errorMessage" data-theme="b" data-overlay-theme="a">
     <p>error message placeholder</p>
   </div>
+{% endblock %}
+
+
+{% block footer %}
+  <h4><span id="footer-date"></span></h4>
 {% endblock %}
