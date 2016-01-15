@@ -6,8 +6,10 @@
   <script src="{% static 'checklist/main.js' %}"></script>
 
   <script>
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     $(function() {
-      var today = new Date(2016, 0, 9);
 
       {% for task in object_list %}
         setLastDate('{{ task.pk }}', {{ task.interval }}, today,
@@ -26,10 +28,14 @@
     {% ifchanged task.interval %}
 	<li data-role="list-divider">{{ task.interval|interval_label }}</li>
 	{% endifchanged %}
-	<li><a id="btn-{{ task.pk }}" href=#>
+	<li><a id="btn-{{ task.pk }}"
+           onclick="toggle({{ task.pk }}, {{ task.interval }}, today)" href=#>
       {{ task.name }}
       <span id="cnt-{{ task.pk }}" class="ui-li-count"></span>
     </a></li>
   {% endfor %}
   </ul>
+  <div data-role="popup" id="errorMessage" data-theme="b" data-overlay-theme="a">
+    <p>error message placeholder</p>
+  </div>
 {% endblock %}

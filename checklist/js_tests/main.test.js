@@ -16,12 +16,32 @@ function assertCounterLabel(assert, text) {
   assert.equal($('#cnt-1').text(), text, 'Counter label text');
 };
 
-QUnit.module('setLastDate() - Daily Task', {
-  beforeEach: function() {
-    this.today = new Date(2016, 0, 12);
-    $('<a id="btn-1"><span id="cnt-1"></span></a>')
-      .appendTo('#qunit-fixture');
+function beforeEach() {
+  this.today = new Date(2016, 0, 12);
+  $('<a id="btn-1"><span id="cnt-1"></span></a>')
+    .appendTo('#qunit-fixture');
+
+  $.ajax = $.proxy(function(path, options) {
+    this.ajaxPath = path;
+
+    return {
+      always: function() {},
+      done: function() {},
+      fail: function() {}
+    }
+  }, this);
+
+  this.assertCheckRequest = function(assert) {
+    assert.equal(this.ajaxPath, '/check/', 'Requests check on click');
   }
+
+  this.assertUncheckRequest = function(assert) {
+    assert.equal(this.ajaxPath, '/uncheck/', 'Requests uncheck on click');
+  }
+};
+
+QUnit.module('setLastDate() - Daily Task', {
+  beforeEach: beforeEach
 });
 
 QUnit.test("Same day", function(assert) {
@@ -29,6 +49,10 @@ QUnit.test("Same day", function(assert) {
 
   assertButtonIsChecked(assert);
   assertCounterIsHidden(assert);
+
+  toggle(1, Interval.DAY, this.today);
+
+  this.assertUncheckRequest(assert);
 });
 
 QUnit.test("Yesterday", function(assert) {
@@ -36,6 +60,10 @@ QUnit.test("Yesterday", function(assert) {
 
   assertButtonIsNotCheckedYet(assert);
   assertCounterLabel(assert, 'Yesterday');
+
+  toggle(1, Interval.DAY, this.today);
+
+  this.assertCheckRequest(assert);
 });
 
 QUnit.test("2 days ago", function(assert) {
@@ -43,15 +71,15 @@ QUnit.test("2 days ago", function(assert) {
 
   assertButtonIsNotCheckedYet(assert);
   assertCounterLabel(assert, '2 days');
+
+  toggle(1, Interval.DAY, this.today);
+
+  this.assertCheckRequest(assert);
 });
 
 
 QUnit.module('setLastDate() - Weekly Task', {
-  beforeEach: function() {
-    this.today = new Date(2016, 0, 12);
-    $('<a id="btn-1"><span id="cnt-1"></span></a>')
-      .appendTo('#qunit-fixture');
-  }
+  beforeEach: beforeEach
 });
 
 QUnit.test("Same day", function(assert) {
@@ -59,6 +87,10 @@ QUnit.test("Same day", function(assert) {
 
   assertButtonIsChecked(assert);
   assertCounterIsHidden(assert);
+
+  toggle(1, Interval.WEEK, this.today);
+
+  this.assertUncheckRequest(assert);
 });
 
 QUnit.test("Yesterday", function(assert) {
@@ -67,6 +99,10 @@ QUnit.test("Yesterday", function(assert) {
   assertButtonIsChecked(assert);
   assertCounterLabel(assert, 'Yesterday');
   assert.ok($('#cnt-1').hasClass('ui-body-a'), 'White counter label');
+
+  toggle(1, Interval.WEEK, this.today);
+
+  this.assertCheckRequest(assert);
 });
 
 QUnit.test("2 days ago", function(assert) {
@@ -75,6 +111,10 @@ QUnit.test("2 days ago", function(assert) {
   assertButtonIsChecked(assert);
   assertCounterLabel(assert, '2 days');
   assert.ok($('#cnt-1').hasClass('ui-body-a'), 'White counter label');
+
+  toggle(1, Interval.WEEK, this.today);
+
+  this.assertCheckRequest(assert);
 });
 
 QUnit.test("6 days ago", function(assert) {
@@ -83,6 +123,10 @@ QUnit.test("6 days ago", function(assert) {
   assertButtonIsChecked(assert);
   assertCounterLabel(assert, '6 days');
   assert.ok($('#cnt-1').hasClass('ui-body-a'), 'White counter label');
+
+  toggle(1, Interval.WEEK, this.today);
+
+  this.assertCheckRequest(assert);
 });
 
 QUnit.test("7 days ago", function(assert) {
@@ -90,6 +134,10 @@ QUnit.test("7 days ago", function(assert) {
 
   assertButtonIsNotCheckedYet(assert);
   assertCounterLabel(assert, 'Last week');
+
+  toggle(1, Interval.WEEK, this.today);
+
+  this.assertCheckRequest(assert);
 });
 
 QUnit.test("14 days ago", function(assert) {
@@ -97,4 +145,8 @@ QUnit.test("14 days ago", function(assert) {
 
   assertButtonIsNotCheckedYet(assert);
   assertCounterLabel(assert, '2 weeks');
+
+  toggle(1, Interval.WEEK, this.today);
+
+  this.assertCheckRequest(assert);
 });

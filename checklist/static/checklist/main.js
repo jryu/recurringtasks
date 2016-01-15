@@ -52,12 +52,22 @@ function setChecked(shouldCheck, buttonElement, countElement) {
   }
 };
 
+function formatDate(date) {
+  return [date.getMonth() + 1,
+          date.getDate(),
+          date.getFullYear()].join('/');
+};
+
+function createDate(y, m, d) {
+  return new Date(y, m - 1, d);
+};
+
 function setLastDate(pk, interval, today, lastDate) {
   var buttonElement = $('#btn-' + pk);
   var countElement = $('#cnt-' + pk);
 
   if (lastDate) {
-    lastDate = new Date(lastDate.year, lastDate.month - 1, lastDate.day);
+    lastDate = createDate(lastDate.year, lastDate.month, lastDate.day);
     var days = (today - lastDate) / (1000 * 60 * 60 * 24);
 
     // buttonElement
@@ -76,4 +86,43 @@ function setLastDate(pk, interval, today, lastDate) {
     countElement.text('New');
     countElement.show();
   }
+};
+
+function toggle(pk, interval, today) {
+  $.mobile.loading('show');
+
+  var isUncheck =
+      $('#btn-' + pk).hasClass('ui-icon-check') &&
+      $('#cnt-' + pk).is(':hidden');
+
+  var request = $.ajax(
+    isUncheck ? '/uncheck/' : '/check/',
+    {
+      method: 'POST',
+      data: {
+        date: formatDate(today),
+        task: pk,
+      }
+    });
+
+  request.always(function() {
+    $.mobile.loading('hide');
+  });
+
+  request.done(function(response) {
+    if (isUncheck && response.last_date == null) {
+      // The task no longer has any check.
+      setLastDate(pk, interval, today, null);
+    } else {
+      setLastDate(pk, interval, today, response);
+    }
+  });
+
+  request.fail(function(response) {
+    $('#errorMessage p').text(
+        $.map(response.responseJSON, function(val, key) { return val; })
+            .join(' '));
+    $('#errorMessage').popup('open');
+  });
+  return false;
 };
