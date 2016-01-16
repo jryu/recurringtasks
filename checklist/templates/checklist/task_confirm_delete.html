@@ -1,0 +1,25 @@
+{% extends "checklist/base.html" %}
+
+{% block header %}
+  <h1>Delete</h1>
+  <a href="{% url 'main' %}" data-icon='home' class='ui-btn-right'>Home</a>
+{% endblock %}
+
+{% block content %}
+Do you want to delete <strong>{{ object.name }}</strong>?
+<form action="" method="post">
+  {% csrf_token %}
+  <div class="ui-grid-a">
+    <div class="ui-block-a">
+      <a data-rel="back" class="ui-btn ui-btn-icon-left ui-icon-carat-l">
+        Cancel
+      </a>
+    </div>
+    <div class="ui-block-b">
+      <button
+          class="ui-btn ui-btn-icon-left ui-icon-delete ui-shadow-icon ui-btn-b"
+          type="submit">Yes</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

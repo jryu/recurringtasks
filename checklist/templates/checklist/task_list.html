@@ -1,0 +1,30 @@
+{% extends "checklist/base.html" %}
+{% load checklist %}
+
+{% block header %}
+  <h1>Edit Checklist</h1>
+  <a href="{% url 'main' %}" data-icon='home' class='ui-btn-right'>Home</a>
+{% endblock %}
+
+{% block content %}
+  <ul data-role="listview" data-split-icon="delete">
+    <li>
+      <button onclick="window.open('{% url 'task_create' %}', '_self')"
+          class="ui-btn ui-icon-plus ui-btn-icon-left ui-corner-all">
+        Add New Item
+      </button>
+    </li>
+  {% for task in object_list %}
+    {% ifchanged task.interval %}
+      <li data-role="list-divider">{{ task.interval|interval_label }}</li>
+    {% endifchanged %}
+    <li>
+      <a href="{% url 'task_update' task.pk %}">
+        <img src="http://cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.5/images/icons-png/edit-black.png"
+             class="ui-li-icon" />{{ task.name }}
+      </a>
+      <a href="{% url 'task_delete' task.pk %}">Delete</a>
+    </li>
+  {% endfor %}
+  </ul>
+{% endblock %}

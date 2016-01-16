@@ -84,3 +84,29 @@ class CheckDelete(generic.base.View):
             return JsonResponse(response)
         else:
             return JsonResponse(form.errors, status=400)
+
+
+class TaskSuccessUrlMixin(object):
+    def get_success_url(self):
+        return reverse('task_list')
+
+
+class TaskFieldsMixin(object):
+    fields = ['name', 'interval']
+
+
+class TaskList(generic.ListView):
+    model = Task
+
+
+class TaskDelete(TaskSuccessUrlMixin, generic.DeleteView):
+    model = Task
+
+
+class TaskUpdate(TaskSuccessUrlMixin, TaskFieldsMixin, generic.UpdateView):
+    model = Task
+
+
+class TaskCreate(TaskSuccessUrlMixin, TaskFieldsMixin,
+        generic.edit.CreateView):
+    model = Task

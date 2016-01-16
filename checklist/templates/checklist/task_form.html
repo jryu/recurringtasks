@@ -1,0 +1,25 @@
+{% extends "checklist/base.html" %}
+
+{% block header %}
+  <h1>Checklist Item</h1>
+  <a data-rel="back" data-icon='carat-l' class='ui-btn-left'>Back</a>
+  <a href="{% url 'main' %}" data-icon='home' class='ui-btn-right'>Home</a>
+{% endblock %}
+
+{% block content %}
+<form action='' method="post">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  {% for hidden in form.hidden_fields %}
+    {{ hidden }}
+  {% endfor %}
+  {% for field in form.visible_fields %}
+    {{ field.label_tag }}
+    {{ field.errors }}
+    {{ field }}
+  {% endfor %}
+  <button class="ui-shadow ui-btn ui-corner-all ui-btn-b" type="submit">
+    Submit
+  </button>
+</form>
+{% endblock %}

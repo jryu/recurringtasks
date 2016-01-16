@@ -28,6 +28,10 @@
   <a href="#popupMenu" data-rel="popup" data-icon='bars' class="ui-btn-right ">Menu</a>
   <div data-role="popup" id="popupMenu" data-theme="b">
     <ul data-role="listview" data-inset="true" style="min-width:210px;">
+      <li><a href="{% url 'task_list' %}"
+             class="ui-btn ui-btn-icon-left ui-icon-bullets">
+        Edit List
+      </a></li>
     </ul>
   </div>
 {% endblock %}
