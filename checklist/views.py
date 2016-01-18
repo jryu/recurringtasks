@@ -110,3 +110,23 @@ class TaskUpdate(TaskSuccessUrlMixin, TaskFieldsMixin, generic.UpdateView):
 class TaskCreate(TaskSuccessUrlMixin, TaskFieldsMixin,
         generic.edit.CreateView):
     model = Task
+
+
+class Archives(generic.dates.DayArchiveView):
+    model = Check
+    date_field = 'date'
+    allow_empty = True
+    allow_future = True
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(Archives, self).get_context_data(**kwargs)
+
+        context['tasks'] = Task.objects.all()
+
+        is_checked = {}
+        for check in context['object_list']:
+            is_checked[check.task.pk] = True
+        context['is_task_checked'] = is_checked
+
+        return context

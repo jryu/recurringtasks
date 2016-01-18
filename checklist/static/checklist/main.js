@@ -53,13 +53,13 @@ function setChecked(shouldCheck, buttonElement, countElement) {
 };
 
 function formatDate(date) {
-  return [date.getMonth() + 1,
-          date.getDate(),
-          date.getFullYear()].join('/');
+  return [date.getFullYear(),
+          date.getMonth() + 1,
+          date.getDate()].join('-');
 };
 
-function createDate(y, m, d) {
-  return new Date(y, m - 1, d);
+function createDate(json) {
+  return new Date(json.year, json.month - 1, json.day);
 };
 
 function setLastDate(pk, interval, today, lastDate) {
@@ -67,7 +67,7 @@ function setLastDate(pk, interval, today, lastDate) {
   var countElement = $('#cnt-' + pk);
 
   if (lastDate) {
-    lastDate = createDate(lastDate.year, lastDate.month, lastDate.day);
+    lastDate = createDate(lastDate);
     var days = (today - lastDate) / (1000 * 60 * 60 * 24);
 
     // buttonElement
@@ -88,7 +88,7 @@ function setLastDate(pk, interval, today, lastDate) {
   }
 };
 
-function toggle(pk, interval, today) {
+function toggle(pk, interval, today, isArchive) {
   $.mobile.loading('show');
 
   var isUncheck =
@@ -110,7 +110,7 @@ function toggle(pk, interval, today) {
   });
 
   request.done(function(response) {
-    if (isUncheck && response.last_date == null) {
+    if (isUncheck && (response.last_date == null || isArchive)) {
       // The task no longer has any check.
       setLastDate(pk, interval, today, null);
     } else {
@@ -125,4 +125,10 @@ function toggle(pk, interval, today) {
     $('#errorMessage').popup('open');
   });
   return false;
+};
+
+function openArchives(today) {
+  var yesterday = new Date(today.getTime());
+  yesterday.setDate(yesterday.getDate() - 1);
+  window.open(['/archives', formatDate(yesterday)].join('/'), '_self');
 };

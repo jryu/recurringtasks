@@ -14,4 +14,6 @@ urlpatterns = [
     url(r'^tasks/delete/(?P<pk>\d+)$',
         views.TaskDelete.as_view(), name='task_delete'),
 
+    url(r'^archives/(?P<year>[0-9]{4})-(?P<month>[0-9]+)-(?P<day>[0-9]+)/$',
+        views.Archives.as_view(month_format='%m'), name='archives'),
 ]

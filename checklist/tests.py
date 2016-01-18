@@ -77,3 +77,23 @@ class UncheckTests(TestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertTrue('task' in response.json())
+
+
+class ArchivesTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.task_checked = Task.objects.create(name='checked', interval='10')
+        cls.task_unchecked = Task.objects.create(name='unchecked', interval='10')
+
+        Check.objects.create(task=cls.task_unchecked, date='2016-01-15')
+        Check.objects.create(task=cls.task_checked, date='2016-01-16')
+        Check.objects.create(task=cls.task_unchecked, date='2016-01-17')
+
+    def test_no_check_left(self):
+        response = self.client.get(reverse('archives', args=['2016', '01', '16']))
+
+        self.assertEqual(response.status_code, 200)
+
+        is_checked = response.context['is_task_checked']
+        self.assertTrue(self.task_checked.pk in is_checked)
+        self.assertTrue(self.task_unchecked.pk not in is_checked)
