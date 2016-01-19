@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from models import Check, Task
+from .models import Check, Task
 
 class CheckTests(TestCase):
     @classmethod
@@ -15,7 +15,7 @@ class CheckTests(TestCase):
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
         self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {
+        self.assertJSONEqual(response.content.decode('utf-8'), {
             'pk': self.task.pk,
             'year': 2016,
             'month': 1,
@@ -47,7 +47,7 @@ class UncheckTests(TestCase):
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
         self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {
+        self.assertJSONEqual(response.content.decode('utf-8'), {
             'last_date': None,
         })
 
@@ -61,7 +61,7 @@ class UncheckTests(TestCase):
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
         self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {
+        self.assertJSONEqual(response.content.decode('utf-8'), {
             'last_date': '2015-12-31',
             'year': 2015,
             'month': 12,
