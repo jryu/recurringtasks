@@ -1,6 +1,8 @@
+import csv
+
 from django.core.urlresolvers import reverse
 from django.db.models import Max
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import generic
@@ -130,3 +132,31 @@ class Archives(generic.dates.DayArchiveView):
         context['is_task_checked'] = is_checked
 
         return context
+
+
+class DownloadCsv(generic.base.View):
+    def get(self, request, *args, **kwargs):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="checklist.csv"'
+
+        writer = csv.writer(response)
+
+        row = ['Date']
+        task_to_index = {}
+        count = 1
+        for task in Task.objects.all():
+            row.append(task.name)
+            task_to_index[task.pk] = count
+            count += 1
+
+        date_of_row = None
+        for check in Check.objects.all():
+            if check.date != date_of_row:
+                writer.writerow(row)
+                row = [0] * count
+                row[0] = check.date
+                date_of_row = check.date
+            row[task_to_index[check.task.pk]] = 1
+        writer.writerow(row)
+
+        return response

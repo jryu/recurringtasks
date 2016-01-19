@@ -16,4 +16,6 @@ urlpatterns = [
 
     url(r'^archives/(?P<year>[0-9]{4})-(?P<month>[0-9]+)-(?P<day>[0-9]+)/$',
         views.Archives.as_view(month_format='%m'), name='archives'),
+
+    url(r'^csv/$', views.DownloadCsv.as_view(), name='csv'),
 ]

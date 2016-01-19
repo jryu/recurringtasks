@@ -97,3 +97,23 @@ class ArchivesTests(TestCase):
         is_checked = response.context['is_task_checked']
         self.assertTrue(self.task_checked.pk in is_checked)
         self.assertTrue(self.task_unchecked.pk not in is_checked)
+
+
+class CsvTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.task1 = Task.objects.create(name='1', interval='10')
+        cls.task2 = Task.objects.create(name='2', interval='10')
+
+        Check.objects.create(task=cls.task1, date='2016-01-15')
+        Check.objects.create(task=cls.task1, date='2016-01-16')
+        Check.objects.create(task=cls.task2, date='2016-01-16')
+        Check.objects.create(task=cls.task2, date='2016-01-17')
+
+    def test_merge(self):
+        response = self.client.get(reverse('csv'))
+
+        self.assertContains(response, 'Date,1,2')
+        self.assertContains(response, '2016-01-17,0,1')
+        self.assertContains(response, '2016-01-16,1,1')
+        self.assertContains(response, '2016-01-15,1,0')
