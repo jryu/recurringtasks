@@ -1,0 +1,52 @@
+{% extends "checklist/base.html" %}
+{% load staticfiles %}
+
+{% block head %}
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script src="{% static 'checklist/utils.js' %}"></script>
+  <script src="{% static 'checklist/trends.js' %}"></script>
+  <script>
+    google.load('visualization', '1', {packages: ['corechart', 'bar']});
+
+    $(function() {
+      var barChart = new BarChart(
+          '#chart-daily', '#content-daily', '#chart-weekly', '#content-weekly',
+          'input:radio[name=bar-interval]:checked');
+
+      var getData = $.proxy(barChart.getData, barChart);
+
+      google.setOnLoadCallback(getData);
+      $('input:radio[name=bar-interval]').change(getData);
+      $(window).on('throttledresize', $.proxy(barChart.draw, barChart));
+    });
+  </script>
+{% endblock %}
+
+{% block header %}
+  <h1>Trends</h1>
+  <a href="{% url 'main' %}" data-icon='home' class='ui-btn-right'>Home</a>
+{% endblock %}
+
+{% block content %}
+  <form>
+    <fieldset data-role="controlgroup" data-type="horizontal">
+      <legend>Interval of a bar:</legend>
+      <input name="bar-interval" id="bar-interval-1" type="radio" checked="checked" value="1">
+      <label for="bar-interval-1">1 day</label>
+      <input name="bar-interval" id="bar-interval-7" type="radio" value="7">
+      <label for="bar-interval-7">7 days</label>
+      <input name="bar-interval" id="bar-interval-30" type="radio" value="30">
+      <label for="bar-interval-30">30 days</label>
+    </fieldset>
+  </form>
+
+  <div id="content-daily" style="display: none;">
+    <h3 class="ui-bar ui-bar-a ui-corner-all">Daily</h3>
+    <div id="chart-daily"></div>
+  </div>
+
+  <div id="content-weekly" style="display: none;">
+    <h3 class="ui-bar ui-bar-a ui-corner-all">Weekly</h3>
+    <div id="chart-weekly"></div>
+  </div>
+{% endblock %}

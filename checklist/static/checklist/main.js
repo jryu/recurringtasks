@@ -1,7 +1,3 @@
-var Interval = {
-  DAY: 10,
-  WEEK: 20};
-
 function getDailyLabel(days) {
   if (days == 1) {
     return 'Yesterday';
@@ -50,12 +46,6 @@ function setChecked(shouldCheck, buttonElement, countElement) {
     countElement.removeClass('ui-body-a');
     countElement.addClass('ui-body-b');
   }
-};
-
-function formatDate(date) {
-  return [date.getFullYear(),
-          date.getMonth() + 1,
-          date.getDate()].join('-');
 };
 
 function createDate(json) {

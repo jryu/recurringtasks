@@ -117,3 +117,81 @@ class CsvTests(TestCase):
         self.assertContains(response, '2016-01-17,0,1')
         self.assertContains(response, '2016-01-16,1,1')
         self.assertContains(response, '2016-01-15,1,0')
+
+
+class TrendsTests(TestCase):
+    def test_bar_interval_7_days(self):
+        task = Task.objects.create(name='t', interval='10')
+
+        # Both beginning and the end of interval are checked (5/24-5/30)
+        Check.objects.create(task=task, date='2015-05-30')
+        Check.objects.create(task=task, date='2015-05-24')
+
+        # An empty bar (5/17-5/23)
+
+        # End of an interval is checked (5/10-5/16)
+        Check.objects.create(task=task, date='2015-05-16')
+
+        # An empty bar (5/3-5/9)
+
+        # Beginning of an interval is checked (4/26 - 5/2)
+        Check.objects.create(task=task, date='2015-04-26')
+
+        response = self.client.post(reverse('trends_ajax'), {
+            'date': '2015-05-30',
+            'interval': '7',
+        })
+
+        self.assertJSONEqual(response.content.decode('utf-8'), {
+            '10': [
+                ['Date', 't'],
+                ['4/12', 0],
+                ['4/19', 0],
+                ['4/26', 1],
+                ['5/3', 0],
+                ['5/10', 1],
+                ['5/17', 0],
+                ['5/24', 2]
+            ],
+            '20': None,
+            'date': '2015-05-30',
+            'interval': 7,
+        })
+
+    def test_bar_interval_30_days(self):
+        task = Task.objects.create(name='t', interval='20')
+
+        # Both beginning and the end of interval are checked (5/1-5/30)
+        Check.objects.create(task=task, date='2015-05-01')
+        Check.objects.create(task=task, date='2015-05-30')
+
+        # An empty bar (4/1-4/30)
+
+        # End of an interval is checked (3/2-3/31)
+        Check.objects.create(task=task, date='2015-03-31')
+
+        # An empty bar (1/31-3/1)
+
+        # Beginning of an interval is checked (1/1 - 1/30)
+        Check.objects.create(task=task, date='2015-1-1')
+
+        response = self.client.post(reverse('trends_ajax'), {
+            'date': '2015-05-30',
+            'interval': '30',
+        })
+
+        self.assertJSONEqual(response.content.decode('utf-8'), {
+            '10': None,
+            '20': [
+                ['Date', 't'],
+                ['11/2', 0],
+                ['12/2', 0],
+                ['1/1', 1],
+                ['1/31', 0],
+                ['3/2', 1],
+                ['4/1', 0],
+                ['5/1', 2],
+            ],
+            'date': '2015-05-30',
+            'interval': 30,
+        })

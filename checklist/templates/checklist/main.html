@@ -3,6 +3,7 @@
 {% load staticfiles %}
 
 {% block head %}
+  <script src="{% static 'checklist/utils.js' %}"></script>
   <script src="{% static 'checklist/main.js' %}"></script>
 
   <script>
@@ -32,6 +33,10 @@
       <li><a onclick="openArchives(today)" href="#"
              class="ui-btn ui-btn-icon-left ui-icon-clock">
         Edit Archives
+      </a></li>
+      <li><a href="{% url 'trends' %}"
+             class="ui-btn ui-btn-icon-left ui-icon-eye">
+        View Trends
       </a></li>
       <li><a href="{% url 'csv' %}"
              class="ui-btn ui-btn-icon-left ui-icon-arrow-d">

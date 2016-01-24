@@ -1,7 +1,8 @@
 import csv
+from datetime import timedelta
 
 from django.core.urlresolvers import reverse
-from django.db.models import Max
+from django.db.models import Count, Max
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -9,7 +10,7 @@ from django.views import generic
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .models import Check, Task
-from .forms import CheckForm
+from .forms import CheckForm, TrendsForm
 
 class Main(generic.ListView):
     template_name = "checklist/main.html"
@@ -160,3 +161,64 @@ class DownloadCsv(generic.base.View):
         writer.writerow(row)
 
         return response
+
+
+class TrendsAjax(generic.base.View):
+    def format_date(self, date):
+        return date.strftime('%-m/%-d')
+
+    def build_data(self, task_interval, date, count_interval):
+        row = ['Date']
+        task_to_index = {}
+        for task in Task.objects.filter(interval=task_interval):
+            task_to_index[task.pk] = len(row)
+            row.append(task.name)
+
+        # There is no task in this group
+        if len(row) == 1:
+            return None
+
+        data = [row]
+
+        last_day_of_interval = date
+        last_day_of_next_interval = (last_day_of_interval -
+                timedelta(days=count_interval))
+
+        for _ in range(7):
+            row = [0] * len(row)
+            row[0] = self.format_date(
+                    last_day_of_next_interval + timedelta(days=1))
+
+            checks = (Check.objects
+                .filter(
+                    task__interval=task_interval,
+                    date__lte=last_day_of_interval,
+                    date__gt=last_day_of_next_interval)
+                .values('task').order_by()
+                .annotate(total=Count('task')))
+
+            for check in checks:
+                row[task_to_index[check['task']]] = check['total']
+            data.insert(1, row)
+
+            last_day_of_interval = last_day_of_next_interval
+            last_day_of_next_interval = (last_day_of_interval -
+                    timedelta(days=count_interval))
+
+        return data
+
+
+    def post(self, request, *args, **kwargs):
+        form = TrendsForm(request.POST)
+        if form.is_valid():
+            date = form.cleaned_data['date']
+            count_interval = form.cleaned_data['interval']
+
+            return JsonResponse({
+                Task.DAY: self.build_data(Task.DAY, date, count_interval),
+                Task.WEEK: self.build_data(Task.WEEK, date, count_interval),
+                'date': date,
+                'interval': count_interval,
+            })
+        else:
+            return JsonResponse(form.errors, status=400)

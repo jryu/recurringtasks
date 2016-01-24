@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.views.generic import TemplateView
 
 from checklist import views
 
@@ -16,6 +17,11 @@ urlpatterns = [
 
     url(r'^archives/(?P<year>[0-9]{4})-(?P<month>[0-9]+)-(?P<day>[0-9]+)/$',
         views.Archives.as_view(month_format='%m'), name='archives'),
+
+    url(r'^trends/$',
+        TemplateView.as_view(template_name="checklist/trends.html"),
+        name='trends'),
+    url(r'^trends/ajax/$', views.TrendsAjax.as_view(), name='trends_ajax'),
 
     url(r'^csv/$', views.DownloadCsv.as_view(), name='csv'),
 ]
