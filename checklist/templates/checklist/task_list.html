@@ -1,5 +1,6 @@
 {% extends "checklist/base.html" %}
 {% load checklist %}
+{% load staticfiles %}
 
 {% block header %}
   <h1>Edit Checklist</h1>
@@ -20,7 +21,7 @@
     {% endifchanged %}
     <li>
       <a href="{% url 'task_update' task.pk %}">
-        <img src="http://cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.5/images/icons-png/edit-black.png"
+        <img src="{% static 'checklist/icons/edit.png' %}"
              class="ui-li-icon" />{{ task.name }}
       </a>
       <a href="{% url 'task_delete' task.pk %}">Delete</a>
