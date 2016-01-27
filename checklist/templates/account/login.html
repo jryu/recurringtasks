@@ -1,0 +1,27 @@
+{% extends "checklist/base.html" %}
+
+{% load staticfiles %}
+{% load account socialaccount %}
+
+{% block head %}
+  <style>
+    .ui-icon-facebook:after {
+      background-image: url("{% static 'checklist/icons/facebook.png' %}");
+      background-size: 23px 23px;
+    }
+    .ui-icon-google:after {
+      background-image: url("{% static 'checklist/icons/google.ico' %}");
+      background-size: 25px 25px;
+    }
+  </style>
+{% endblock %}
+
+{% block header %}
+  <h1>Recurring Checklist</h1>
+{% endblock %}
+
+{% block content %}
+  {% get_providers as socialaccount_providers %}
+  <p>Please sign in with one of your existing third party accounts.</p>
+  {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+{% endblock %}

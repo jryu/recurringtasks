@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 from django.test import TestCase
 
 from .models import Check, Task
@@ -7,6 +8,10 @@ class CheckTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.task = Task.objects.create(name='testing', interval='10')
+
+    def setUp(self):
+        self.client.force_login(
+                User.objects.create_user(username='u', password='p'))
 
     def test_date_in_response(self):
         response = self.client.post(reverse('check'), {
@@ -37,6 +42,10 @@ class UncheckTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.task = Task.objects.create(name='testing', interval='10')
+
+    def setUp(self):
+        self.client.force_login(
+                User.objects.create_user(username='u', password='p'))
 
     def test_no_check_left(self):
         Check.objects.create(task=self.task, date='2016-01-15')
@@ -89,6 +98,10 @@ class ArchivesTests(TestCase):
         Check.objects.create(task=cls.task_checked, date='2016-01-16')
         Check.objects.create(task=cls.task_unchecked, date='2016-01-17')
 
+    def setUp(self):
+        self.client.force_login(
+                User.objects.create_user(username='u', password='p'))
+
     def test_no_check_left(self):
         response = self.client.get(reverse('archives', args=['2016', '01', '16']))
 
@@ -109,6 +122,10 @@ class CsvTests(TestCase):
         Check.objects.create(task=cls.task1, date='2016-01-16')
         Check.objects.create(task=cls.task2, date='2016-01-16')
         Check.objects.create(task=cls.task2, date='2016-01-17')
+
+    def setUp(self):
+        self.client.force_login(
+                User.objects.create_user(username='u', password='p'))
 
     def test_merge(self):
         response = self.client.get(reverse('csv'))

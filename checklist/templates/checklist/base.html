@@ -72,7 +72,14 @@
 
     <div data-role="footer">
       {% block footer %}
-        <h4>What is easy to do is easy not to do</h4>
+        <h4>
+        {% if user.is_authenticated %}
+          {{ user.get_full_name }} |
+          <a href="{% url 'account_logout' %}">Sign Out</a>
+        {% else %}
+          What is easy to do is easy not to do
+        {% endif %}
+        </h4>
       {% endblock %}
     </div><!-- /footer -->
   </div><!-- /page -->

@@ -1,6 +1,7 @@
 import csv
 from datetime import timedelta
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse
 from django.db.models import Count, Max
 from django.http import HttpResponse, JsonResponse
@@ -12,7 +13,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from .models import Check, Task
 from .forms import CheckForm, TrendsForm
 
-class Main(generic.ListView):
+class Main(LoginRequiredMixin, generic.ListView):
     template_name = "checklist/main.html"
 
     @method_decorator(ensure_csrf_cookie)
@@ -56,7 +57,8 @@ class AjaxableResponseMixin(object):
             return response
 
 
-class CheckCreate(AjaxableResponseMixin, generic.edit.CreateView):
+class CheckCreate(LoginRequiredMixin, AjaxableResponseMixin,
+        generic.edit.CreateView):
     model = Check
     fields = ['date', 'task']
 
@@ -64,7 +66,7 @@ class CheckCreate(AjaxableResponseMixin, generic.edit.CreateView):
         return reverse('main')
 
 
-class CheckDelete(generic.base.View):
+class CheckDelete(LoginRequiredMixin, generic.base.View):
     def post(self, request, *args, **kwargs):
         form = CheckForm(request.POST)
         if form.is_valid():
@@ -98,24 +100,25 @@ class TaskFieldsMixin(object):
     fields = ['name', 'interval']
 
 
-class TaskList(generic.ListView):
+class TaskList(LoginRequiredMixin, generic.ListView):
     model = Task
 
 
-class TaskDelete(TaskSuccessUrlMixin, generic.DeleteView):
+class TaskDelete(LoginRequiredMixin, TaskSuccessUrlMixin, generic.DeleteView):
     model = Task
 
 
-class TaskUpdate(TaskSuccessUrlMixin, TaskFieldsMixin, generic.UpdateView):
+class TaskUpdate(LoginRequiredMixin, TaskSuccessUrlMixin, TaskFieldsMixin,
+        generic.UpdateView):
     model = Task
 
 
-class TaskCreate(TaskSuccessUrlMixin, TaskFieldsMixin,
+class TaskCreate(LoginRequiredMixin, TaskSuccessUrlMixin, TaskFieldsMixin,
         generic.edit.CreateView):
     model = Task
 
 
-class Archives(generic.dates.DayArchiveView):
+class Archives(LoginRequiredMixin, generic.dates.DayArchiveView):
     model = Check
     date_field = 'date'
     allow_empty = True
@@ -135,7 +138,7 @@ class Archives(generic.dates.DayArchiveView):
         return context
 
 
-class DownloadCsv(generic.base.View):
+class DownloadCsv(LoginRequiredMixin, generic.base.View):
     def get(self, request, *args, **kwargs):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="checklist.csv"'
