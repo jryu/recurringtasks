@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.contrib.auth.models import User
 from django.db import models
 
 class Task(models.Model):
@@ -15,6 +16,7 @@ class Task(models.Model):
             choices=INTERVAL_CHOICES, default=DAY)
     datetime_update = models.DateTimeField(auto_now=True)
     datetime_create = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User)
 
     def __unicode__(self):
         return ' - '.join([

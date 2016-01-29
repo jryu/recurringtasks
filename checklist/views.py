@@ -13,6 +13,15 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from .models import Check, Task
 from .forms import CheckForm, TrendsForm
 
+
+def task_objects_for_user(request):
+    return Task.objects.filter(created_by=request.user)
+
+
+def check_objects_for_user(request):
+    return Check.objects.filter(task__created_by=request.user)
+
+
 class Main(LoginRequiredMixin, generic.ListView):
     template_name = "checklist/main.html"
 
@@ -21,7 +30,7 @@ class Main(LoginRequiredMixin, generic.ListView):
         return super(Main, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
-        return (Task.objects
+        return (task_objects_for_user(self.request)
                 .annotate(last_date=Max('check__date'))
                 .order_by('interval', 'last_date'))
 
@@ -62,6 +71,12 @@ class CheckCreate(LoginRequiredMixin, AjaxableResponseMixin,
     model = Check
     fields = ['date', 'task']
 
+    def form_valid(self, form):
+        if form.instance.task.created_by == self.request.user:
+            return super(CheckCreate, self).form_valid(form)
+        else:
+            return self.form_invalid(form)
+
     def get_success_url(self):
         return reverse('main')
 
@@ -70,11 +85,13 @@ class CheckDelete(LoginRequiredMixin, generic.base.View):
     def post(self, request, *args, **kwargs):
         form = CheckForm(request.POST)
         if form.is_valid():
-            Check.objects.filter(
+            shared_queryset = check_objects_for_user(request)
+
+            shared_queryset.filter(
                     task_id=form.cleaned_data['task'],
                     date=form.cleaned_data['date']).delete()
 
-            last_date = (Check.objects
+            last_date = (shared_queryset
                     .filter(task_id=form.cleaned_data['task'])
                     .aggregate(Max('date'))['date__max'])
 
@@ -100,35 +117,47 @@ class TaskFieldsMixin(object):
     fields = ['name', 'interval']
 
 
-class TaskList(LoginRequiredMixin, generic.ListView):
-    model = Task
+class TaskQuerysetMixin(object):
+    def get_queryset(self):
+        return task_objects_for_user(self.request)
 
 
-class TaskDelete(LoginRequiredMixin, TaskSuccessUrlMixin, generic.DeleteView):
-    model = Task
+class TaskList(LoginRequiredMixin, TaskQuerysetMixin, generic.ListView):
+    pass
 
 
-class TaskUpdate(LoginRequiredMixin, TaskSuccessUrlMixin, TaskFieldsMixin,
-        generic.UpdateView):
-    model = Task
+class TaskDelete(LoginRequiredMixin, TaskQuerysetMixin, TaskSuccessUrlMixin,
+        generic.DeleteView):
+    pass
+
+
+class TaskUpdate(LoginRequiredMixin, TaskQuerysetMixin, TaskSuccessUrlMixin,
+        TaskFieldsMixin, generic.UpdateView):
+    pass
 
 
 class TaskCreate(LoginRequiredMixin, TaskSuccessUrlMixin, TaskFieldsMixin,
         generic.edit.CreateView):
     model = Task
 
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super(TaskCreate, self).form_valid(form)
+
 
 class Archives(LoginRequiredMixin, generic.dates.DayArchiveView):
-    model = Check
     date_field = 'date'
     allow_empty = True
     allow_future = True
+
+    def get_queryset(self):
+        return check_objects_for_user(self.request)
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(Archives, self).get_context_data(**kwargs)
 
-        context['tasks'] = Task.objects.all()
+        context['tasks'] = task_objects_for_user(self.request)
 
         is_checked = {}
         for check in context['object_list']:
@@ -148,13 +177,13 @@ class DownloadCsv(LoginRequiredMixin, generic.base.View):
         row = ['Date']
         task_to_index = {}
         count = 1
-        for task in Task.objects.all():
+        for task in task_objects_for_user(request):
             row.append(task.name)
             task_to_index[task.pk] = count
             count += 1
 
         date_of_row = None
-        for check in Check.objects.all():
+        for check in check_objects_for_user(request):
             if check.date != date_of_row:
                 writer.writerow(row)
                 row = [0] * count
@@ -173,7 +202,8 @@ class TrendsAjax(generic.base.View):
     def build_data(self, task_interval, date, count_interval):
         row = ['Date']
         task_to_index = {}
-        for task in Task.objects.filter(interval=task_interval):
+        for task in task_objects_for_user(self.request).filter(
+                interval=task_interval):
             task_to_index[task.pk] = len(row)
             row.append(task.name)
 
@@ -192,7 +222,7 @@ class TrendsAjax(generic.base.View):
             row[0] = self.format_date(
                     last_day_of_next_interval + timedelta(days=1))
 
-            checks = (Check.objects
+            checks = (check_objects_for_user(self.request)
                 .filter(
                     task__interval=task_interval,
                     date__lte=last_day_of_interval,
