@@ -2,7 +2,10 @@
 
 {% block header %}
   <h1>Delete</h1>
-  <a href="{% url 'main' %}" data-icon='home' class='ui-btn-right'>Home</a>
+  <a href="{% url 'main' %}"
+     class='ui-btn-right ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-icon-home'>
+    Home
+  </a>
 {% endblock %}
 
 {% block content %}
@@ -11,13 +14,13 @@ Do you want to delete <strong>{{ object.name }}</strong>?
   {% csrf_token %}
   <div class="ui-grid-a">
     <div class="ui-block-a">
-      <a data-rel="back" class="ui-btn ui-btn-icon-left ui-icon-carat-l">
+      <a data-rel="back" class="ui-btn ui-btn-icon-left ui-icon-carat-l ui-corner-all">
         Cancel
       </a>
     </div>
     <div class="ui-block-b">
       <button
-          class="ui-btn ui-btn-icon-left ui-icon-delete ui-shadow-icon ui-btn-b"
+          class="ui-btn ui-btn-icon-left ui-icon-delete ui-shadow-icon ui-btn-b ui-corner-all"
           type="submit">Yes</button>
     </div>
   </div>

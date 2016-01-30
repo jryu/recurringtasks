@@ -2,8 +2,14 @@
 
 {% block header %}
   <h1>Checklist Item</h1>
-  <a data-rel="back" data-icon='carat-l' class='ui-btn-left'>Back</a>
-  <a href="{% url 'main' %}" data-icon='home' class='ui-btn-right'>Home</a>
+  <a data-rel="back"
+     class='ui-btn-left ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-icon-carat-l'>
+    Back
+  </a>
+  <a href="{% url 'main' %}"
+     class='ui-btn-right ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-icon-home'>
+    Home
+  </a>
 {% endblock %}
 
 {% block content %}
