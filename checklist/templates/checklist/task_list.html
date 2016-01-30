@@ -4,14 +4,17 @@
 
 {% block header %}
   <h1>Edit Checklist</h1>
-  <a href="{% url 'main' %}" data-icon='home' class='ui-btn-right'>Home</a>
+  <a href="{% url 'main' %}"
+	 class='ui-btn-right ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-icon-home'>
+    Home
+  </a>
 {% endblock %}
 
 {% block content %}
   <ul data-role="listview" data-split-icon="delete">
     <li>
       <button onclick="window.open('{% url 'task_create' %}', '_self')"
-          class="ui-btn ui-icon-plus ui-btn-icon-left ui-corner-all">
+          class="ui-btn ui-icon-plus ui-btn-icon-left ui-corner-all ui-btn-b">
         Add New Item
       </button>
     </li>
