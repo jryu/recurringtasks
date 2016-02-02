@@ -32,15 +32,15 @@
         Edit List
       </a></li>
       <li><a onclick="openArchives(today)" href="#"
-             class="ui-btn ui-btn-icon-left ui-icon-clock">
+             class="ui-btn ui-btn-icon-left ui-icon-clock {% if not object_list %}ui-state-disabled{% endif %}">
         Edit Archives
       </a></li>
       <li><a href="{% url 'trends' %}"
-             class="ui-btn ui-btn-icon-left ui-icon-eye">
+             class="ui-btn ui-btn-icon-left ui-icon-eye {% if not object_list %}ui-state-disabled{% endif %}">
         View Trends
       </a></li>
       <li><a href="{% url 'csv' %}"
-             class="ui-btn ui-btn-icon-left ui-icon-arrow-d">
+             class="ui-btn ui-btn-icon-left ui-icon-arrow-d {% if not object_list %}ui-state-disabled{% endif %}">
         Download CSV file
       </a></li>
     </ul>
@@ -48,6 +48,7 @@
 {% endblock %}
 
 {% block content %}
+  {% if object_list %}
   <ul data-role="listview" data-count-theme="b" data-inset="true">
   {% for task in object_list %}
     {% ifchanged task.interval %}
@@ -63,6 +64,16 @@
   <div data-role="popup" id="errorMessage" data-theme="b" data-overlay-theme="a">
     <p>error message placeholder</p>
   </div>
+
+  {% else %}
+    <p>The list is empty. Please follow these steps:</p>
+    <p>1) Open <strong>Menu</strong></p>
+    <img src="{% static 'checklist/screenshots/add_step_1.png' %}" class="screenshot ui-overlay-shadow" />
+    <p>2) Select <strong>Edit List</strong></p>
+    <img src="{% static 'checklist/screenshots/add_step_2.png' %}" class="screenshot ui-overlay-shadow" />
+    <p>3) Press <strong>Add New Item</strong> button</p>
+    <img src="{% static 'checklist/screenshots/add_step_3.png' %}" class="screenshot ui-overlay-shadow" />
+  {% endif %}
 {% endblock %}
 
 
