@@ -4,6 +4,14 @@
 {% load account socialaccount %}
 
 {% block head %}
+  <script>
+    $(function() {
+      $('.socialaccount_provider').on('click', function() {
+        $.mobile.loading('show');
+      });
+    });
+  </script>
+
   <style>
     .ui-icon-facebook:after {
       background-image: url("{% static 'checklist/icons/facebook.png' %}");
