@@ -4,4 +4,4 @@ rm -rf /tmp/dummy
 
 (cd /tmp && django-admin startproject dummy)
 
-grep SECRET_KEY /tmp/dummy/dummy/settings.py > secret_key.py
+grep SECRET_KEY /tmp/dummy/dummy/settings.py >> private_stuff.py
