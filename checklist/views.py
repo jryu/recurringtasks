@@ -1,6 +1,7 @@
 import csv
 from datetime import timedelta
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse
 from django.db.models import Count, Func, Max
@@ -34,10 +35,15 @@ class Main(LoginRequiredMixin, generic.ListView):
         return super(Main, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
-        return (task_objects_for_user(self.request)
-                .annotate(last_date=Max('check__date'))
-                .annotate(last_date_isnull=IsNull('last_date'))
-                .order_by('interval', '-last_date_isnull', 'last_date'))
+        queryset = (task_objects_for_user(self.request)
+                .annotate(last_date=Max('check__date')))
+        if (settings.DATABASES['default']['ENGINE'] ==
+                'django.db.backends.postgresql_psycopg2'):
+            return (queryset
+                    .annotate(last_date_isnull=IsNull('last_date'))
+                    .order_by('interval', '-last_date_isnull', 'last_date'))
+        else:
+            return queryset.order_by('interval', 'last_date')
 
 
 # https://docs.djangoproject.com/en/1.9/topics/class-based-views/generic-editing/#ajax-example
