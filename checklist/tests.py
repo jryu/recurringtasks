@@ -6,6 +6,43 @@ from django.test import TestCase
 
 from .models import Check, Task
 
+class MainViewTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.the_user = User.objects.create_user(username='u', password='p')
+
+    def setUp(self):
+        self.client.force_login(self.the_user)
+
+    def test_new_task_sort_order(self):
+        new_task = Task.objects.create(
+                name='new_task', interval='10', created_by=self.the_user)
+        other_task = Task.objects.create(
+		name='other_task', interval='10', created_by=self.the_user)
+
+        Check.objects.create(task=other_task, date='2016-01-15')
+
+        response = self.client.get(reverse('main'))
+        tasks = response.context['object_list']
+        self.assertEqual(tasks.count(), 2)
+        self.assertEqual(tasks[0].name, "new_task")
+
+    def test_last_date_sort_order(self):
+        task1 = Task.objects.create(
+                name='1', interval='10', created_by=self.the_user)
+        task2 = Task.objects.create(
+		name='2', interval='10', created_by=self.the_user)
+
+        Check.objects.create(task=task1, date='2016-01-15')
+        Check.objects.create(task=task2, date='2016-01-16')
+        Check.objects.create(task=task1, date='2016-01-17')
+
+        response = self.client.get(reverse('main'))
+        tasks = response.context['object_list']
+        self.assertEqual(tasks.count(), 2)
+        self.assertEqual(tasks[0].name, "2")
+
+
 class CheckTests(TestCase):
     @classmethod
     def setUpTestData(cls):

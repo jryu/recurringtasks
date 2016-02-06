@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse
-from django.db.models import Count, Max
+from django.db.models import Count, Func, Max
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -22,6 +22,10 @@ def check_objects_for_user(request):
     return Check.objects.filter(task__created_by=request.user)
 
 
+class IsNull(Func):
+    template = '%(expressions)s IS NULL'
+
+
 class Main(LoginRequiredMixin, generic.ListView):
     template_name = "checklist/main.html"
 
@@ -32,7 +36,8 @@ class Main(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         return (task_objects_for_user(self.request)
                 .annotate(last_date=Max('check__date'))
-                .order_by('interval', 'last_date'))
+                .annotate(last_date_isnull=IsNull('last_date'))
+                .order_by('interval', '-last_date_isnull', 'last_date'))
 
 
 # https://docs.djangoproject.com/en/1.9/topics/class-based-views/generic-editing/#ajax-example
