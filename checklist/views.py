@@ -38,7 +38,7 @@ class Main(LoginRequiredMixin, generic.ListView):
         queryset = (task_objects_for_user(self.request)
                 .annotate(last_date=Max('check__date')))
         if (settings.DATABASES['default']['ENGINE'] ==
-                'django.db.backends.postgresql_psycopg2'):
+                'django.db.backends.postgresql'):
             return (queryset
                     .annotate(last_date_isnull=IsNull('last_date'))
                     .order_by('interval', '-last_date_isnull', 'last_date'))
