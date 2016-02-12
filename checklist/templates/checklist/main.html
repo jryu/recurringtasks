@@ -17,7 +17,19 @@
       {% endfor %}
 
       $('#footer-date').text(today.toLocaleDateString());
+
+      window.setInterval(checkToday, 15 * 60 * 1000);
     });
+
+    $(document).on('visibilitychange', checkToday);
+
+    function checkToday() {
+      var currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+      if (today < currentDate) {
+        location.reload(true);
+      }
+    };
   </script>
 {% endblock %}
 
