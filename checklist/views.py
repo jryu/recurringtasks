@@ -1,5 +1,5 @@
 import csv
-from datetime import timedelta
+from datetime import date, timedelta
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -181,7 +181,9 @@ class Archives(LoginRequiredMixin, generic.dates.DayArchiveView):
 class DownloadCsv(LoginRequiredMixin, generic.base.View):
     def get(self, request, *args, **kwargs):
         response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="checklist.csv"'
+        response['Content-Disposition'] = (
+                'attachment; filename="checklist_%s.csv"' %
+                date.today().isoformat())
 
         writer = csv.writer(response)
 
