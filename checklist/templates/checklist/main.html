@@ -1,6 +1,7 @@
 {% extends "checklist/base.html" %}
 {% load checklist %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block head %}
   <script src="{% static 'checklist/utils.js' %}"></script>
@@ -34,7 +35,7 @@
 {% endblock %}
 
 {% block header %}
-  <h1>Checklist</h1>
+  <h1>{% trans 'Checklist' %}</h1>
   <a href="#popupMenu" data-rel="popup"
      class="ui-btn-right ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-inline ui-icon-bars ui-btn-icon-left">Menu</a>
   <div data-role="popup" id="popupMenu" data-theme="b">
