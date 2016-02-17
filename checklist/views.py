@@ -41,9 +41,9 @@ class Main(LoginRequiredMixin, generic.ListView):
                 'django.db.backends.postgresql'):
             return (queryset
                     .annotate(last_date_isnull=IsNull('last_date'))
-                    .order_by('interval', '-last_date_isnull', 'last_date'))
+                    .order_by('interval', '-last_date_isnull', 'last_date', 'name'))
         else:
-            return queryset.order_by('interval', 'last_date')
+            return queryset.order_by('interval', 'last_date', 'name')
 
 
 # https://docs.djangoproject.com/en/1.9/topics/class-based-views/generic-editing/#ajax-example
