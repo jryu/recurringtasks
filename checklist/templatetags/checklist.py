@@ -1,7 +1,9 @@
 import json
+import string
 
 from django import template
 from django.utils.safestring import mark_safe
+from django.utils.translation import get_language_from_request
 
 from ..models import Task
 
@@ -21,3 +23,14 @@ def date_json(date):
             }))
     else:
         return 'null'
+
+@register.filter
+def i18n_user_name(user):
+    full_name = user.get_full_name()
+    for letter in full_name:
+        if letter in string.ascii_letters:
+            return full_name
+
+    # Assume that it is a Korean name.
+    full_name = '%s%s' % (user.last_name, user.first_name)
+    return full_name.strip()

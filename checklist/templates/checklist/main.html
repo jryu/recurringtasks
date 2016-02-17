@@ -4,6 +4,7 @@
 {% load i18n %}
 
 {% block head %}
+  <script type="text/javascript" src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
   <script src="{% static 'checklist/utils.js' %}"></script>
   <script src="{% static 'checklist/main.js' %}"></script>
 
@@ -37,24 +38,26 @@
 {% block header %}
   <h1>{% trans 'Checklist' %}</h1>
   <a href="#popupMenu" data-rel="popup"
-     class="ui-btn-right ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-inline ui-icon-bars ui-btn-icon-left">Menu</a>
+     class="ui-btn-right ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-inline ui-icon-bars ui-btn-icon-left">
+    {% trans 'Menu' %}
+  </a>
   <div data-role="popup" id="popupMenu" data-theme="b">
     <ul data-role="listview" data-inset="true" style="min-width:210px;">
       <li><a href="{% url 'task_list' %}"
              class="ui-btn ui-btn-icon-left ui-icon-bullets">
-        Edit List
+        {% trans 'Edit List' %}
       </a></li>
       <li><a onclick="openArchives(today)" href="#"
              class="ui-btn ui-btn-icon-left ui-icon-clock {% if not object_list %}ui-state-disabled{% endif %}">
-        Edit Archives
+        {% trans 'Edit Archives' %}
       </a></li>
       <li><a href="{% url 'trends' %}"
              class="ui-btn ui-btn-icon-left ui-icon-eye {% if not object_list %}ui-state-disabled{% endif %}">
-        View Trends
+        {% trans 'View Trends' %}
       </a></li>
       <li><a href="{% url 'csv' %}"
              class="ui-btn ui-btn-icon-left ui-icon-arrow-d {% if not object_list %}ui-state-disabled{% endif %}">
-        Download CSV file
+        {% trans 'Download CSV file' %}
       </a></li>
     </ul>
   </div>
@@ -79,13 +82,31 @@
   </div>
 
   {% else %}
-    <p>The list is empty. Please follow these steps:</p>
-    <p>1) Open <strong>Menu</strong></p>
-    <img src="{% static 'checklist/screenshots/add_step_1.png' %}" class="screenshot ui-overlay-shadow" />
-    <p>2) Select <strong>Edit List</strong></p>
-    <img src="{% static 'checklist/screenshots/add_step_2.png' %}" class="screenshot ui-overlay-shadow" />
-    <p>3) Press <strong>Add New Item</strong> button</p>
-    <img src="{% static 'checklist/screenshots/add_step_3.png' %}" class="screenshot ui-overlay-shadow" />
+    <p>{% trans 'The list is empty. Please follow these steps:' %}</p>
+    <p>{% trans '1) Open <strong>Menu</strong>' %}</p>
+    {% get_current_language as LANGUAGE_CODE %}
+
+    {% if LANGUAGE_CODE == 'ko' %}
+      <img src="{% static 'checklist/screenshots/ko/add_step_1.png' %}" class="screenshot ui-overlay-shadow" />
+    {% else %}
+      <img src="{% static 'checklist/screenshots/add_step_1.png' %}" class="screenshot ui-overlay-shadow" />
+    {% endif %}
+
+    <p>{% trans '2) Select <strong>Edit List</strong>' %}</p>
+
+    {% if LANGUAGE_CODE == 'ko' %}
+      <img src="{% static 'checklist/screenshots/ko/add_step_2.png' %}" class="screenshot ui-overlay-shadow" />
+    {% else %}
+      <img src="{% static 'checklist/screenshots/add_step_2.png' %}" class="screenshot ui-overlay-shadow" />
+    {% endif %}
+
+    <p>{% trans '3) Press <strong>Add New Item</strong> button' %}</p>
+
+    {% if LANGUAGE_CODE == 'ko' %}
+      <img src="{% static 'checklist/screenshots/ko/add_step_3.png' %}" class="screenshot ui-overlay-shadow" />
+    {% else %}
+      <img src="{% static 'checklist/screenshots/add_step_3.png' %}" class="screenshot ui-overlay-shadow" />
+    {% endif %}
   {% endif %}
 {% endblock %}
 
@@ -93,8 +114,8 @@
 {% block footer %}
   <h4>
     {% if user.is_authenticated %}
-      {{ user.get_full_name }} |
-      <a href="{% url 'account_logout' %}">Sign Out</a> |
+      {{ user | i18n_user_name }} |
+      <a href="{% url 'account_logout' %}">{% trans 'Sign Out' %}</a> |
     {% endif %}
     <span id="footer-date"></span>
   </h4>

@@ -12,7 +12,7 @@ from django.views import generic
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .models import Check, Task
-from .forms import CheckForm, TrendsForm
+from .forms import CheckForm, TaskForm, TrendsForm
 
 
 def task_objects_for_user(request):
@@ -124,8 +124,8 @@ class TaskSuccessUrlMixin(object):
         return reverse('task_list')
 
 
-class TaskFieldsMixin(object):
-    fields = ['name', 'interval']
+class TaskFormMixin(object):
+    form_class = TaskForm
 
 
 class TaskQuerysetMixin(object):
@@ -143,11 +143,11 @@ class TaskDelete(LoginRequiredMixin, TaskQuerysetMixin, TaskSuccessUrlMixin,
 
 
 class TaskUpdate(LoginRequiredMixin, TaskQuerysetMixin, TaskSuccessUrlMixin,
-        TaskFieldsMixin, generic.UpdateView):
+        TaskFormMixin, generic.UpdateView):
     pass
 
 
-class TaskCreate(LoginRequiredMixin, TaskSuccessUrlMixin, TaskFieldsMixin,
+class TaskCreate(LoginRequiredMixin, TaskSuccessUrlMixin, TaskFormMixin,
         generic.edit.CreateView):
     model = Task
 

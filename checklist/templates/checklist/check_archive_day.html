@@ -1,6 +1,7 @@
 {% extends "checklist/base.html" %}
 {% load checklist %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block head %}
   <script src="{% static 'checklist/utils.js' %}"></script>
@@ -23,20 +24,21 @@
 {% block header %}
   <h1>{{ day }}</h1>
   <a href="{% url 'main' %}"
-     class='ui-btn-right ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-icon-home'>Today</a>
+     class='ui-btn-right ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-icon-home'>
+    {% trans 'Today' %}</a>
   <div data-role="navbar" data-iconpos="right">
     <ul>
       <li>
         <a href="{% url 'archives' previous_day.year previous_day.month previous_day.day %}"
             class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-carat-l">
-          Previous Day
+          {% trans 'Previous Day' %}
         </a>
       </li>
       <li>
         <a href="{% url 'archives' next_day.year next_day.month next_day.day %}"
             id="next-day-btn"
             class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-right ui-icon-carat-r">
-          Next Day
+          {% trans 'Next Day' %}
         </a>
       </li>
     </ul>

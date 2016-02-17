@@ -2,6 +2,7 @@
 
 {% load staticfiles %}
 {% load account socialaccount %}
+{% load i18n %}
 
 {% block head %}
   <script>
@@ -25,34 +26,46 @@
 {% endblock %}
 
 {% block header %}
-  <h1>Recurring Checklist</h1>
+<h1>{% trans 'Recurring Checklist' %}</h1>
 {% endblock %}
 
 {% block content %}
   <div class="ui-corner-all custom-corners" style="margin-bottom: 1em;">
     <div class="ui-bar ui-bar-a">
-      <h3>Sign In</h3>
+      <h3>{% trans 'Sign In' %}</h3>
     </div>
     <div class="ui-body ui-body-a">
       {% get_providers as socialaccount_providers %}
-      <p>Please sign in with one of your existing third party accounts.</p>
+      <p>{% trans 'Please sign in with one of your existing third party accounts.' %}</p>
       {% include "socialaccount/snippets/provider_list.html" with process="login" %}
     </div>
   </div>
 
   <div class="ui-corner-all custom-corners">
     <div class="ui-bar ui-bar-a">
-      <h3>Preview</h3>
+      <h3>{% trans 'Preview' %}</h3>
     </div>
     <div class="ui-body ui-body-a">
-      <p><strong>Features</strong></p>
+      <p><strong>{% trans 'Features' %}</strong></p>
       <ul>
-        <li>Checklist items are refreshed for each interval.</li>
-        <li>Each item keeps track of the last time when it has been checked.</li>
+        <li>{% trans 'Checklist items are refreshed for each interval.' %}</li>
+        <li>{% trans 'Each item keeps track of the last time when it has been checked.' %}</li>
       </ul>
-      <img src="{% static 'checklist/screenshots/main.png' %}" class="screenshot ui-overlay-shadow" />
-      <p>You may also take a look at how you have been doing.</p>
-      <img src="{% static 'checklist/screenshots/trends.png' %}" class="screenshot ui-overlay-shadow" />
+      {% get_current_language as LANGUAGE_CODE %}
+
+      {% if LANGUAGE_CODE == 'ko' %}
+        <img src="{% static 'checklist/screenshots/ko/main.png' %}" class="screenshot ui-overlay-shadow" />
+      {% else %}
+        <img src="{% static 'checklist/screenshots/main.png' %}" class="screenshot ui-overlay-shadow" />
+      {% endif %}
+
+      <p>{% trans 'You may also take a look at how you have been doing.' %}</p>
+
+      {% if LANGUAGE_CODE == 'ko' %}
+        <img src="{% static 'checklist/screenshots/ko/trends.png' %}" class="screenshot ui-overlay-shadow" />
+      {% else %}
+        <img src="{% static 'checklist/screenshots/trends.png' %}" class="screenshot ui-overlay-shadow" />
+      {% endif %}
     </div>
   </div>
 {% endblock %}

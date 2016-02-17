@@ -1,5 +1,6 @@
 {% extends "checklist/base.html" %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block head %}
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -23,40 +24,40 @@
 {% endblock %}
 
 {% block header %}
-  <h1>Trends</h1>
+  <h1>{% trans 'Trends' %}</h1>
   <a href="{% url 'main' %}"
      class='ui-btn-right ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-icon-home'>
-    Home
+    {% trans 'Home' %}
   </a>
 {% endblock %}
 
 {% block content %}
   <form>
     <fieldset data-role="collapsible">
-      <legend>Settings</legend>
+      <legend>{% trans 'Settings' %}</legend>
       <fieldset data-role="controlgroup" data-type="horizontal">
-        <legend>Interval of a bar:</legend>
+        <legend>{% trans 'Interval of a bar' %}:</legend>
         <input name="bar-interval" id="bar-interval-1" type="radio" checked="checked" value="1">
-        <label for="bar-interval-1">1 day</label>
+        <label for="bar-interval-1">{% trans '1 day' %}</label>
         <input name="bar-interval" id="bar-interval-7" type="radio" value="7">
-        <label for="bar-interval-7">7 days</label>
+        <label for="bar-interval-7">{% trans '7 days' %}</label>
         <input name="bar-interval" id="bar-interval-30" type="radio" value="30">
-        <label for="bar-interval-30">30 days</label>
+        <label for="bar-interval-30">{% trans '30 days' %}</label>
       </fieldset>
     </fieldset>
   </form>
 
-  <div class="ui-corner-all custom-corners" style="margin: 1em 0;">
+  <div id="content-daily" class="ui-corner-all custom-corners" style="margin: 1em 0;">
     <div class="ui-bar ui-bar-a">
-      <h3>Daily</h3>
+      <h3>{% trans 'Daily' %}</h3>
     </div>
     <div id="chart-daily" class="ui-body-a">
     </div>
   </div>
 
-  <div class="ui-corner-all custom-corners">
+  <div id="content-weekly" class="ui-corner-all custom-corners">
     <div class="ui-bar ui-bar-a">
-      <h3>Weekly</h3>
+      <h3>{% trans 'Weekly' %}</h3>
     </div>
     <div id="chart-weekly" class="ui-body-a">
     </div>

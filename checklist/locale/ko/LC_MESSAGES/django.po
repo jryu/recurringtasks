@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-12 23:53-0800\n"
+"POT-Creation-Date: 2016-02-15 21:29-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,182 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: templates/checklist/main.html:38
+#: forms.py:11
+msgid "name"
+msgstr "항목 이름"
+
+#: forms.py:12
+msgid "interval"
+msgstr "주기"
+
+#: models.py:11 templates/checklist/trends.html.py:52
+msgid "Daily"
+msgstr "매일"
+
+#: models.py:12 templates/checklist/trends.html.py:60
+msgid "Weekly"
+msgstr "매주"
+
+#: templates/account/login.html:29
+msgid "Recurring Checklist"
+msgstr "되풀이 체크리스트"
+
+#: templates/account/login.html:35
+msgid "Sign In"
+msgstr "로그인"
+
+#: templates/account/login.html:39
+msgid "Please sign in with one of your existing third party accounts."
+msgstr "외부 계정을 사용해서 로그인 하세요."
+
+#: templates/account/login.html:46
+msgid "Preview"
+msgstr "미리보기"
+
+#: templates/account/login.html:49
+msgid "Features"
+msgstr "주요기능"
+
+#: templates/account/login.html:51
+msgid "Checklist items are refreshed for each interval."
+msgstr "정해진 주기마다 항목이 업데이트 됩니다."
+
+#: templates/account/login.html:52
+msgid "Each item keeps track of the last time when it has been checked."
+msgstr "항목마다 마지막에 체크한 시간이 보입니다."
+
+#: templates/account/login.html:55
+msgid "You may also take a look at how you have been doing."
+msgstr "얼마나 잘 하고 있는지 확인할 수 있습니다."
+
+#: templates/account/logout.html:5 templates/checklist/base.html.py:119
+#: templates/checklist/main.html:100
+msgid "Sign Out"
+msgstr "로그아웃"
+
+#: templates/account/logout.html:9
+msgid "Are you sure you want to sign out?"
+msgstr "정말로 로그아웃 하시겠습니까?"
+
+#: templates/account/logout.html:19
+#: templates/checklist/task_confirm_delete.html:19
+msgid "Cancel"
+msgstr "취소"
+
+#: templates/account/logout.html:25
+#: templates/checklist/task_confirm_delete.html:25
+msgid "Yes"
+msgstr "확인"
+
+#: templates/checklist/base.html:121
+msgid "What is easy to do is easy not to do"
+msgstr "하기 쉬운 일은 안 하기도 쉽다"
+
+#: templates/checklist/check_archive_day.html:28
+msgid "Today"
+msgstr "오늘"
+
+#: templates/checklist/check_archive_day.html:34
+msgid "Previous Day"
+msgstr "이전날"
+
+#: templates/checklist/check_archive_day.html:41
+msgid "Next Day"
+msgstr "다음날"
+
+#: templates/checklist/main.html:39
 msgid "Checklist"
 msgstr "체크리스트"
+
+#: templates/checklist/main.html:42
+msgid "Menu"
+msgstr "메뉴"
+
+#: templates/checklist/main.html:48
+msgid "Edit List"
+msgstr "목록 편집"
+
+#: templates/checklist/main.html:52
+msgid "Edit Archives"
+msgstr "과거 기록 수정"
+
+#: templates/checklist/main.html:56
+msgid "View Trends"
+msgstr "트렌드 보기"
+
+#: templates/checklist/main.html:60
+msgid "Download CSV file"
+msgstr "CSV 파일 다운로드"
+
+#: templates/checklist/main.html:85
+msgid "The list is empty. Please follow these steps:"
+msgstr "목록이 비어 있습니다. 아래와 같이 항목을 추가하세요:"
+
+#: templates/checklist/main.html:86
+msgid "1) Open <strong>Menu</strong>"
+msgstr "1) <strong>메뉴</strong>를 여세요."
+
+#: templates/checklist/main.html:88
+msgid "2) Select <strong>Edit List</strong>"
+msgstr "2) <strong>목록 편집</strong>을 선택하세요."
+
+#: templates/checklist/main.html:90
+msgid "3) Press <strong>Add New Item</strong> button"
+msgstr "3) <strong>새 항목 추가</strong> 버튼을 누르세요."
+
+#: templates/checklist/task_confirm_delete.html:5
+msgid "Delete"
+msgstr "삭제"
+
+#: templates/checklist/task_confirm_delete.html:13
+msgid "Do you want to delete <strong>%(object_name)s</strong>?"
+msgstr "다음 항목을 삭제합니다: <strong>%(object_name)s</strong>"
+
+#: templates/checklist/task_form.html:5
+msgid "Checklist Item"
+msgstr "체크리스트 항목"
+
+#: templates/checklist/task_form.html:8
+msgid "Back"
+msgstr "뒤로"
+
+#: templates/checklist/task_form.html:12 templates/checklist/task_list.html:10
+#: templates/checklist/trends.html:30
+msgid "Home"
+msgstr "홈"
+
+#: templates/checklist/task_form.html:29
+msgid "Submit"
+msgstr "저장하기"
+
+#: templates/checklist/task_list.html:7
+msgid "Edit Checklist"
+msgstr "체크리스트 편집"
+
+#: templates/checklist/task_list.html:19
+msgid "Add New Item"
+msgstr "새 항목 추가"
+
+#: templates/checklist/trends.html:27
+msgid "Trends"
+msgstr "트렌드"
+
+#: templates/checklist/trends.html:37
+msgid "Settings"
+msgstr "설정"
+
+#: templates/checklist/trends.html:39
+msgid "Interval of a bar"
+msgstr "막대 한칸의 폭"
+
+#: templates/checklist/trends.html:41
+msgid "1 day"
+msgstr "1일"
+
+#: templates/checklist/trends.html:43
+msgid "7 days"
+msgstr "7일"
+
+#: templates/checklist/trends.html:45
+msgid "30 days"
+msgstr "30일"

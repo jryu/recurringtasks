@@ -1,11 +1,13 @@
 {% extends "checklist/base.html" %}
+{% load checklist %}
+{% load i18n %}
 
 {% block header %}
-  <h1>Sign Out</h1>
+  <h1>{% trans 'Sign Out' %}</h1>
 {% endblock %}
 
 {% block content %}
-<p>Are you sure you want to sign out?</p>
+<p>{% trans 'Are you sure you want to sign out?' %}</p>
 
 <form method="post" action="{% url 'account_logout' %}">
   {% csrf_token %}
@@ -14,12 +16,14 @@
   {% endif %}
   <div class="ui-grid-a">
     <div class="ui-block-a">
-      <a data-rel="back" class="ui-btn ui-btn-icon-left ui-icon-carat-l ui-corner-all">Cancel</a>
+      <a data-rel="back" class="ui-btn ui-btn-icon-left ui-icon-carat-l ui-corner-all">
+        {% trans 'Cancel' %}
+      </a>
     </div>
     <div class="ui-block-b">
       <button class="ui-btn ui-btn-icon-left ui-icon-delete
           ui-shadow-icon ui-btn-b ui-corner-all" type="submit">
-        Yes
+        {% trans 'Yes' %}
       </button>
     </div>
   </div>
@@ -27,5 +31,5 @@
 {% endblock %}
 
 {% block footer %}
-  <h4>{{ user.get_full_name }}</h4>
+  <h4>{{ user | i18n_user_name }}</h4>
 {% endblock %}

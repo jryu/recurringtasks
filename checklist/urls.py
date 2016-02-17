@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
+from django.views.i18n import javascript_catalog
 
 from checklist import views
 
@@ -25,4 +26,6 @@ urlpatterns = [
     url(r'^trends/ajax/$', views.TrendsAjax.as_view(), name='trends_ajax'),
 
     url(r'^csv/$', views.DownloadCsv.as_view(), name='csv'),
+
+    url(r'^jsi18n/$', javascript_catalog, {'packages': ('checklist')}),
 ]

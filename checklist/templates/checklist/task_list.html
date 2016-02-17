@@ -1,12 +1,13 @@
 {% extends "checklist/base.html" %}
 {% load checklist %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block header %}
-  <h1>Edit Checklist</h1>
+  <h1>{% trans 'Edit Checklist' %}</h1>
   <a href="{% url 'main' %}"
 	 class='ui-btn-right ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-icon-home'>
-    Home
+    {% trans 'Home' %}
   </a>
 {% endblock %}
 
@@ -15,7 +16,7 @@
     <li>
       <button onclick="window.open('{% url 'task_create' %}', '_self')"
           class="ui-btn ui-icon-plus ui-btn-icon-left ui-corner-all ui-btn-b">
-        Add New Item
+        {% trans 'Add New Item' %}
       </button>
     </li>
   {% for task in object_list %}

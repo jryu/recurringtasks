@@ -1,14 +1,15 @@
 {% extends "checklist/base.html" %}
+{% load i18n %}
 
 {% block header %}
-  <h1>Checklist Item</h1>
+  <h1>{% trans 'Checklist Item' %}</h1>
   <a data-rel="back"
      class='ui-btn-left ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-icon-carat-l'>
-    Back
+    {% trans 'Back' %}
   </a>
   <a href="{% url 'main' %}"
      class='ui-btn-right ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-icon-home'>
-    Home
+    {% trans 'Home' %}
   </a>
 {% endblock %}
 
@@ -25,7 +26,7 @@
     {{ field }}
   {% endfor %}
   <button class="ui-shadow ui-btn ui-corner-all ui-btn-b" type="submit">
-    Submit
+    {% trans 'Submit' %}
   </button>
 </form>
 {% endblock %}

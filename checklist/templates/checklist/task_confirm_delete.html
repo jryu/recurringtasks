@@ -1,7 +1,8 @@
 {% extends "checklist/base.html" %}
+{% load i18n %}
 
 {% block header %}
-  <h1>Delete</h1>
+  <h1>{% trans 'Delete' %}</h1>
   <a href="{% url 'main' %}"
      class='ui-btn-right ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-icon-home'>
     Home
@@ -9,19 +10,19 @@
 {% endblock %}
 
 {% block content %}
-Do you want to delete <strong>{{ object.name }}</strong>?
+{% blocktrans with object_name=object.name %}Do you want to delete <strong>{{ object_name }}</strong>?{% endblocktrans %}
 <form action="" method="post">
   {% csrf_token %}
   <div class="ui-grid-a">
     <div class="ui-block-a">
       <a data-rel="back" class="ui-btn ui-btn-icon-left ui-icon-carat-l ui-corner-all">
-        Cancel
+        {% trans 'Cancel' %}
       </a>
     </div>
     <div class="ui-block-b">
       <button
           class="ui-btn ui-btn-icon-left ui-icon-delete ui-shadow-icon ui-btn-b ui-corner-all"
-          type="submit">Yes</button>
+          type="submit">{% trans 'Yes' %}</button>
     </div>
   </div>
 </form>

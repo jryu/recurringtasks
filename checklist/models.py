@@ -2,13 +2,14 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 class Task(models.Model):
     DAY = '10'
     WEEK = '20'
     INTERVAL_CHOICES = (
-        (DAY, 'Daily'),
-        (WEEK, 'Weekly'),
+        (DAY, _('Daily')),
+        (WEEK, _('Weekly')),
     )
 
     name = models.CharField(max_length=128)

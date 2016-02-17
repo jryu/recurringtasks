@@ -1,16 +1,16 @@
 function getDailyLabel(days) {
   if (days == 1) {
-    return 'Yesterday';
+    return gettext('Yesterday');
   } else {
-    return days + ' days';
+    return days + gettext(' days');
   }
 };
 
 function getWeeklyLabel(weeks) {
   if (weeks == 1) {
-    return 'Last week';
+    return gettext('Last week');
   } else {
-    return weeks + ' weeks';
+    return weeks + gettext(' weeks');
   }
 };
 
