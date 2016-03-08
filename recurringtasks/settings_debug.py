@@ -133,6 +133,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = '/home/checklist/jryu.github.io/recurringtasks'
+
 STATICFILES_DIRS = [
     ('js_tests/checklist', os.path.join(BASE_DIR, 'checklist/js_tests')),
 ]

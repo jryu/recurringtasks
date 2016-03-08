@@ -19,10 +19,10 @@ class Task(models.Model):
     datetime_create = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User)
 
-    def __unicode__(self):
+    def __str__(self):
         return ' - '.join([
             self.name,
-            dict(Task.INTERVAL_CHOICES)[self.interval]
+            str(dict(Task.INTERVAL_CHOICES)[self.interval])
         ])
 
     class Meta:
@@ -34,9 +34,9 @@ class Check(models.Model):
     date = models.DateField()
     datetime_create = models.DateTimeField(auto_now_add=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return ' | '.join([
-                unicode(self.task),
+                str(self.task),
                 self.date.isoformat(),
                 ''.join([
                     '(',

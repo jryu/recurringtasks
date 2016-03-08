@@ -27,8 +27,6 @@ DATABASES = {
 
 STATIC_URL = 'https://jryu.github.io/recurringtasks/'
 
-STATIC_ROOT = '/home/checklist/jryu.github.io/recurringtasks'
-
 
 SITE_ID = 2
 
